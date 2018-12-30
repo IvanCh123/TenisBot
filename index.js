@@ -19,9 +19,25 @@ var dispatcher = null;
 var voiceChannel = null;
 var skipRequest = 0;
 var skippers = [];
+var currentSongID = "";
 
 
 client.login(discord_token);
+
+
+client.on('message', message => { //Allows the bot to reply when pinged
+    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|\\${prefix})\\s*`);
+    if (!prefixRegex.test(message.content)) return;
+
+    const [, matchedPrefix] = message.content.match(prefixRegex);
+    const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
+    const command = args.shift();
+
+    if (command === '') { //@ing the bot
+      message.channel.send("**Current commands** :stuck_out_tongue: :triumph: :kissing_smiling_eyes:  \n:one: TENISplay \n:two: TENISskip \n:three: TENISqueue \n:four: TENIStalk \n:five: TENIShead \n:six: TENISsup");
+    }
+});
+
 
 client.on('message', function(message){
   const member = message.member;
@@ -58,7 +74,7 @@ client.on('message', function(message){
       skipRequest++;
       if(skipRequest >= Math.ceil((voiceChannel.members.size -1) / 2)){
         skipSong(message);
-        message.reply(" song skipped.");
+        message.channel.send(" song skipped.");
       }else{
         message.reply(" need **"+ Math.ceil((voiceChannel.members.size -1) / 2) - skipRequest + "** more skip votes.");
       }
@@ -66,7 +82,11 @@ client.on('message', function(message){
       message.reply("You already voted ok retard");
     }
   }else if(mess.startsWith(prefix + "queue")){ //broken af
-    message.reply(getQueue());
+    message.channel.send(getQueue());
+
+  }else if(mess.startsWith(prefix + "now")){
+    var currentSong = "https://www.youtube.com/watch?v="+currentSongID;
+    message.channel.send("Current song: "+currentSong);
 
   }else if(mess.startsWith(prefix + "talk")){
     var quote = "";
@@ -97,10 +117,9 @@ client.on('message', function(message){
 
     const heads = [vexHead, tenisHead];
     var s = heads[getRandomInt(heads.length)]
-    message.reply("\n"+s);
-
-  }else if(mess.startsWith(prefix + "cm")){
-    message.reply("**Current commands** :stuck_out_tongue: :triumph: :kissing_smiling_eyes:  \n:one: TENISplay \n:two: TENISskip \n:three: TENISqueue \n:four: TENIStalk \n:five: TENIShead");
+    message.channel.send("\n"+s);
+  }else if(mess.startsWith(prefix + "sup")){
+    message.channel.send(`<@${message.author.id}> sup :tongue:`)
   }
 });
 
@@ -126,6 +145,7 @@ function getRandomInt(max) {
 
 function playMusic(id, message){
   voiceChannel = message.member.voiceChannel;
+  currentSongID = id;
 
   voiceChannel.join().then(function(connection){
     stream = ytdl("https://www.youtube.com/watch?v="+ id, {
@@ -144,6 +164,7 @@ function playMusic(id, message){
         isPlaying = false;
       }else{
         playMusic(queue[0], message);
+
       }
     });
   });
