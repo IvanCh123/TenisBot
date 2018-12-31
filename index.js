@@ -40,6 +40,8 @@ client.on('message', message => { //Allows the bot to reply when pinged
 });
 
 var skipState = false;
+var queueTitles = [];
+var leaveState = false;
 
 client.on('message', function(message) {
   const member = message.member;
@@ -47,14 +49,16 @@ client.on('message', function(message) {
   const args = message.content.split(' ').slice(1).join(" ");
 
   if (mess.startsWith(prefix + "play")) { //client = bot
-    if (member.voiceChannel || client.guilds.get("427720724418002955").voiceConnection != null) {
+    if (member.voiceChannel) {
       message.member.voiceChannel.join();
+      leaveState = false;
       if (queue.length > 0 || isPlaying) { //Adding to queue
         getID(args, function(id) {
           addToQueue(id);
           fetchVideoInfo(id, function(err, videoInfo) {
             if (err) throw new Error(err);
             message.channel.send(`<@${message.author.id}> added https://www.youtube.com/watch?v=` + id + " to the queue.");
+            queueTitles.push(videoInfo.title);
           });
         });
       } else { //It's not playing or queue > 1
@@ -80,14 +84,14 @@ client.on('message', function(message) {
           skipSong(message);
           message.channel.send("Song skipped.");
           if (queue.length > 0 || isPlaying) {
-            message.channel.send("[Up] Now playing https://www.youtube.com/watch?v=" + queue[0]);
+            message.channel.send("Now playing https://www.youtube.com/watch?v=" + queue[0]);
           }
           skipState = false;
         } else {
           message.reply(" need **" + Math.ceil((voiceChannel.members.size - 1) / 2) - skipRequest + "** more skip votes.");
         }
       } else {
-        message.reply("You already voted ok retard");
+        message.reply("You already voted");
       }
     } else {
       message.channel.send("The queue is empty.");
@@ -95,19 +99,19 @@ client.on('message', function(message) {
   } else if (mess.startsWith(prefix + "leave")) {
 
     if(message.member.voiceChannel){
-      if (member.voiceChannel.id == client.voiceConnections.voiceChannelID) {
-        message.channel.send("I'm leaving");
+        message.channel.send("I'm fucking leaving :triumph:");
+        queueTitles = [];
+        queue = [];
+        isPlaying = false;
+        leaveState = true;
         message.guild.voiceConnection.disconnect();
-      } else {
-        message.channel.send(`1 <@${message.author.id}> you need to be in the same voice channel to use this command.`);
-      }
     }else{
-      message.channel.send(`2 <@${message.author.id}> second id: `+client.guilds.voiceConnection);
+      message.channel.send(`<@${message.author.id}> you need to be in a voice channel to execute this command.`);
     }
 
   } else if (mess.startsWith(prefix + "queue")) { //broken af
-    if (queue.length > 0 || isPlaying) {
-      message.channel.send(getQueue());
+    if (queueTitles.length > 0) {
+      message.channel.send("**Queue:**"+getQueue());
     } else {
       message.channel.send("The queue is empty.");
     }
@@ -161,11 +165,11 @@ function skipSong() {
   dispatcher.end();
 }
 
-function getQueue() { //Need to convert from array to string to fix the current error I assume idk
+function getQueue() {
   var playlist = "";
-  if (queue.length > 0 || isPlaying) {
-    for (var i = 0; i < queue.length; i++) {
-      playlist += "\n" + (i + 1) + "- " + queue[i];
+  if (queueTitles.length > 0) {
+    for (var i = 0; i < queueTitles.length; i++) {
+      playlist += "\n        **" + (i + 1) + "-** " + queueTitles[i];
     }
   }
   return playlist;
@@ -176,32 +180,36 @@ function getRandomInt(max) {
 }
 
 function playMusic(id, message) {
-  if (skipState == false) {
-    message.channel.send("[Down] Now playing https://www.youtube.com/watch?v=" + id);
-  }
-  voiceChannel = message.member.voiceChannel;
-  currentSongID = id;
+  if(leaveState == false){
+    if (skipState == false) {
+      message.channel.send("Now playing https://www.youtube.com/watch?v=" + id);
+    }
+    voiceChannel = message.member.voiceChannel;
+    currentSongID = id;
 
-  voiceChannel.join().then(function(connection) {
-    stream = ytdl("https://www.youtube.com/watch?v=" + id, {
-      filter: 'audioonly'
-    });
-    skipRequest = 0;
-    skippers = [];
-
-    dispatcher = connection.playStream(stream);
-    dispatcher.on('end', function() {
+    voiceChannel.join().then(function(connection) {
+      stream = ytdl("https://www.youtube.com/watch?v=" + id, {
+        filter: 'audioonly'
+      });
       skipRequest = 0;
       skippers = [];
-      queue.shift();
-      if (queue.length == 0) {
-        queue = [];
-        isPlaying = false;
-      } else {
-        playMusic(queue[0], message);
-      }
+
+      dispatcher = connection.playStream(stream);
+      dispatcher.on('end', function() {
+        skipRequest = 0;
+        skippers = [];
+        queue.shift();
+        queueTitles.shift();
+        if (queue.length == 0) {
+          queue = [];
+          queueTitles = [];
+          isPlaying = false;
+        } else {
+          playMusic(queue[0], message);
+        }
+      });
     });
-  });
+  }
 }
 
 function getID(str, cb) {
