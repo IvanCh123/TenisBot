@@ -180,11 +180,10 @@ client.on('message', function(message) {
     message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
 
   } else if (mess.startsWith("im") || mess.startsWith("I'm") || mess.startsWith("Im") || mess.startsWith("i'm")) {
-      const tenisSay = ["im tenis from night vision"];
-      var rSay = "";
-      rSay = tenisSay[getRandomInt(tenisSay.length)];
-      message.channel.send(rSay);
-
+    if(message.author.id != "529372644634787850"){
+      var tenisSay = ["im tenis from night vision","i'm autistic"];
+      message.channel.send(`Hi <@${message.author.id}> `+ tenisSay[getRandomInt(tenisSay.length)]);
+    }
   } else if (mess.startsWith("tenisxd")) {
     const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT"];
     var rPic = "";
