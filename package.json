@@ -1,6 +1,9 @@
 {
   "name": "discordbot",
   "version": "1.0.0",
+  "engines":{
+    "node":"10.15.0"
+  }
   "description": "Tenis Bot",
   "main": "index.js",
   "scripts": {
