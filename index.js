@@ -9,7 +9,7 @@ const fetchVideoInfo = require("youtube-info");
 var config = JSON.parse(fs.readFileSync('./settings.json', 'utf-8'));
 
 const yt_api_key = config.yt_api_key;
-//const bot_controller = config.bot_controller;
+const bot_controller = config.bot_controller;
 const prefix = config.prefix;
 const discord_token = config.discord_token;
 
@@ -179,8 +179,11 @@ client.on('message', function(message) {
   } else if (mess.startsWith("sup")) {
     message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
 
-  } else if (mess.startsWith("im")) {
-    message.channel.send("yea well I'm autistic");
+  } else if (mess.startsWith("im") || mess.startsWith("I'm") || mess.startsWith("Im") || mess.startsWith("i'm")) {
+      const tenisSay = ["im tenis from night vision"];
+      var rSay = "";
+      rSay = tenisSay[getRandomInt(tenisSay.length)];
+      message.channel.send(rSay);
 
   } else if (mess.startsWith("tenisxd")) {
     const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT"];
