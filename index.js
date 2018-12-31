@@ -35,7 +35,7 @@ client.on('message', message => { //Allows the bot to reply when pinged
 
   if (command === '') { //@ing the bot
     message.channel.send("**Current commands** :stuck_out_tongue: :triumph: :kissing_smiling_eyes:  \n:one: TENISplay " +
-      "\n:two: TENISskip \n:three: TENISnow \n:four: TENISqueue \n:five: TENIStalk \n:six: TENIShead \n:seven: TENISsup \n:eight: TENISleave");
+      "\n:two: TENISskip \n:three: TENISnow \n:four: TENISqueue \n:five: TENIStalk \n:six: TENIShead \n:seven: TENISleave");
   }
 });
 
@@ -80,16 +80,13 @@ client.on('message', function(message) {
       if (skippers.indexOf(message.author.id == -1)) {
         skippers.push(message.author.id);
         skipRequest++;
-        if (skipRequest >= Math.ceil((voiceChannel.members.size - 1) / 2)) {
-          skipSong(message);
-          message.channel.send("Song skipped.");
-          if (queue.length > 0 || isPlaying) {
-            message.channel.send("Now playing https://www.youtube.com/watch?v=" + queue[0]);
-          }
-          skipState = false;
-        } else {
-          message.reply(" need **" + Math.ceil((voiceChannel.members.size - 1) / 2) - skipRequest + "** more skip votes.");
+        skipSong(message);
+        message.channel.send("Song skipped.");
+        if (queue.length > 0 || isPlaying) {
+          message.channel.send("Now playing https://www.youtube.com/watch?v=" + queue[0]);
         }
+        skipState = false;
+
       } else {
         message.reply("You already voted");
       }
@@ -98,20 +95,20 @@ client.on('message', function(message) {
     }
   } else if (mess.startsWith(prefix + "leave")) {
 
-    if(message.member.voiceChannel){
-        message.channel.send("I'm fucking leaving :triumph:");
-        queueTitles = [];
-        queue = [];
-        isPlaying = false;
-        leaveState = true;
-        message.guild.voiceConnection.disconnect();
-    }else{
+    if (message.member.voiceChannel) {
+      message.channel.send("I'm fucking leaving :triumph:");
+      queueTitles = [];
+      queue = [];
+      isPlaying = false;
+      leaveState = true;
+      message.guild.voiceConnection.disconnect();
+    } else {
       message.channel.send(`<@${message.author.id}> you need to be in a voice channel to execute this command.`);
     }
 
   } else if (mess.startsWith(prefix + "queue")) { //broken af
     if (queueTitles.length > 0) {
-      message.channel.send("**Queue:**"+getQueue());
+      message.channel.send("**Queue:**" + getQueue());
     } else {
       message.channel.send("The queue is empty.");
     }
@@ -140,20 +137,56 @@ client.on('message', function(message) {
       ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
       ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:";
 
-    const tenisHead = ":blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :black_large_square: :blue_book: :blue_book: :black_large_square: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :blue_book: :black_large_square: :blue_book: :black_large_square: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :blue_book: :black_large_square: :black_large_square: :black_large_square: :blue_book: :blue_book:\n" +
-      ":blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book: :blue_book:";
+    const tenisHead = ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::black_large_square::blue_book::blue_book::black_large_square::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::blue_book::black_large_square::blue_book::black_large_square::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::blue_book::black_large_square::black_large_square::black_large_square::blue_book::blue_book:\n" +
+      ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:";
 
-    const heads = [vexHead, tenisHead];
+    const inlocHead =      ":black_large_square:️:white_large_square:️:white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_large_square:️:black_large_square:️\n"+
+    ":white_large_square:️:white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_large_square:️\n"+":white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark:\n"+
+    ":white_check_mark::u7121:️:u7121:️:u7121:️:u7121:️:u7981::u7981::white_check_mark:\n"+
+    ":white_check_mark::u7121:️:u7121:️:u7121:️:u7981::u7981::u7981::white_check_mark:\n"+
+    ":white_check_mark::u7121:️:u7121:️:u7981::u7981::u7981::u7981::white_check_mark:\n"+
+    ":white_check_mark::white_check_mark::u7981::u7981::u7981::u7981::white_check_mark::white_check_mark:\n"+
+    ":white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark::white_check_mark:";
+
+    const nyHead = ":black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:\n"+
+    ":black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:\n"+
+    ":black_large_square::hibiscus::hibiscus::black_large_square::black_large_square::hibiscus::hibiscus::black_large_square:\n"+
+    ":black_large_square::hibiscus::milky_way::black_large_square::black_large_square::milky_way::hibiscus::black_large_square:\n"+
+    ":black_large_square::black_large_square::black_large_square::hibiscus::hibiscus::black_large_square::black_large_square::black_large_square:\n"+
+    ":black_large_square::black_large_square::hibiscus::milky_way::milky_way::hibiscus::black_large_square::black_large_square:\n"+
+    ":black_large_square::black_large_square::milky_way::milky_way::milky_way::milky_way::black_large_square::black_large_square:\n"+
+    ":black_large_square::black_large_square::milky_way::black_large_square::black_large_square::milky_way::black_large_square::black_large_square:";
+
+    const boogerHead = ":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️\n"+
+":black_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️\n"+
+":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️\n"+
+":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️\n"+
+":white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️\n"+
+":white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️\n"+
+":black_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️\n"+
+":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️";
+
+    const heads = [vexHead, tenisHead,inlocHead,nyHead, boogerHead];
     var s = heads[getRandomInt(heads.length)]
     message.channel.send("\n" + s);
-  } else if (mess.startsWith(prefix + "sup")) {
-    message.channel.send(`<@${message.author.id}> sup :tongue:`)
+
+  } else if (mess.startsWith("sup")) {
+    message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
+
+  } else if (mess.startsWith("im")) {
+    message.channel.send("yea well I'm autistic");
+
+  } else if (mess.startsWith("tenisxd")) {
+    const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT"];
+    var rPic = "";
+    rPic = tenisPics[getRandomInt(tenisPics.length)];
+    message.channel.send(rPic);
   }
 });
 
@@ -180,7 +213,7 @@ function getRandomInt(max) {
 }
 
 function playMusic(id, message) {
-  if(leaveState == false){
+  if (leaveState == false) {
     if (skipState == false) {
       message.channel.send("Now playing https://www.youtube.com/watch?v=" + id);
     }
