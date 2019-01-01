@@ -7,7 +7,7 @@
 
 # Functionalities and Commands
 ###    Youtube 
->``TENISplay`` [name] will play the first result [name] in Youtube.          
+>``TENISplay`` [name] will play the first search result of [name] in Youtube.          
 >``TENISskip`` will skip the current song and play the next song in the queue.          
 >``TENISnow`` will return the name of the current song.          
 > ``TENISqueue`` will return the list of the songs in the queue.          
