@@ -1,8 +1,8 @@
 #                THE ULTIMATE DISCORD BOT
 
-> Developed by Ivan for Vex's Garage 😎
-> Version: idfk.10.2
-> In loving memory of [Valentino1210](https://image.prntscr.com/image/djMnMJSwSbKj_dcNfDiAww.png).
+> Developed by Ivan for the cool dudes at Vex's Garage 😎          
+> Version: idfk.10.2             
+> In loving memory of [Valentino1210](https://image.prntscr.com/image/djMnMJSwSbKj_dcNfDiAww.png).               
 >
 
 # Functionalities and Commands
