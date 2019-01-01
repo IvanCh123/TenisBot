@@ -5,6 +5,8 @@ const request = require("request");
 const fs = require("fs");
 const getYoutubeID = require("get-youtube-id");
 const fetchVideoInfo = require("youtube-info");
+const superagent = require("superagent");
+const colours = require("./colours.json");
 
 var config = JSON.parse(fs.readFileSync('./settings.json', 'utf-8'));
 
@@ -25,7 +27,7 @@ var currentSongID = "";
 client.login(discord_token);
 
 
-client.on('message', message => { //Allows the bot to reply when pinged
+client.on('message', async message => { //Allows the bot to reply when pinged
   const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|\\${prefix})\\s*`);
   if (!prefixRegex.test(message.content)) return;
 
@@ -34,8 +36,45 @@ client.on('message', message => { //Allows the bot to reply when pinged
   const command = args.shift();
 
   if (command === '') { //@ing the bot
-    message.channel.send("**Current commands** :stuck_out_tongue: :triumph: :kissing_smiling_eyes:  \n:one: TENISplay " +
-      "\n:two: TENISskip \n:three: TENISnow \n:four: TENISqueue \n:five: TENIStalk \n:six: TENIShead \n:seven: TENISleave");
+    message.delete();
+    message.channel.send("**Current commands** :stuck_out_tongue: :triumph: :kissing_smiling_eyes:  \n       :one: TENISplay " +
+      "\n       :two: TENISskip \n       :three: TENISnow \n       :four: TENISqueue \n       :five: TENIStalk \n       :six: TENIShead \n       :seven: TENISleave \n       :eight: TENISdog \n       :nine: TENISmeme \n       :fire: Special Words: tenisxd, sup tenis, im");
+  }else if(command === "meme"){
+      let msg = await message.channel.send("Generating memewes...");
+
+      let {body} = await superagent
+      .get(`https://api-to.get-a.life/meme`)
+      if(!{body}) return message.channel.send("i dieeeed")
+
+      let mEmbed = new Discord.RichEmbed()
+      .setColor(colours.blue)
+      .setAuthor(`Memes xd`, message.guild.iconURL)
+      .setImage(body.url)
+      .setTimestamp()
+      .setFooter("El tenisxd", client.user.displayAvatarURL)
+
+      message.channel.send({embed: mEmbed})
+
+      msg.delete();
+
+  }else if(command === "dog"){
+      let msg = await message.channel.send("Generating dogowo...");
+
+      let {body} = await superagent
+      .get(`https://dog.ceo/api/breed/shiba/images/random`)
+      if(!{body}) return message.channel.send("i dieeeed")
+
+      let dEmbed = new Discord.RichEmbed()
+      .setColor(colours.blue)
+      .setAuthor(`Dogos owo`, message.guild.iconURL)
+      .setImage(body.message)
+      .setTimestamp()
+      .setFooter("El tenisxd", client.user.displayAvatarURL)
+
+      message.channel.send({embed: dEmbed})
+
+      msg.delete();
+
   }
 });
 
@@ -43,7 +82,7 @@ var skipState = false;
 var queueTitles = [];
 var leaveState = false;
 
-client.on('message', function(message) {
+client.on('message', async function(message) {
   const member = message.member;
   const mess = message.content;
   const args = message.content.split(' ').slice(1).join(" ");
@@ -75,24 +114,28 @@ client.on('message', function(message) {
       message.channel.send(`<@${message.author.id}> you need to be in a voice channel.`);
     }
   } else if (mess.startsWith(prefix + "skip")) {
-    if (queue.length > 0 || isPlaying) {
-      skipState = true;
-      if (skippers.indexOf(message.author.id == -1)) {
-        skippers.push(message.author.id);
-        skipRequest++;
-        skipSong(message);
-        message.channel.send("Song skipped.");
-        if (queue.length > 0 || isPlaying) {
-          message.channel.send("Now playing https://www.youtube.com/watch?v=" + queue[0]);
+    if(message.member.voiceChannel){
+      if (queue.length > 0 || isPlaying){
+        skipState = true;
+        if (skippers.indexOf(message.author.id == -1)) {
+          skippers.push(message.author.id);
+          skipRequest++;
+          skipSong(message);
+          message.channel.send("Song skipped.");
+          if (queue.length > 0 || isPlaying) {
+            message.channel.send("Now playing https://www.youtube.com/watch?v=" + queue[0]);
+          }
+          skipState = false;
+        } else {
+          message.reply("You already voted");
         }
-        skipState = false;
-
       } else {
-        message.reply("You already voted");
+        message.channel.send("The queue is empty.");
       }
-    } else {
-      message.channel.send("The queue is empty.");
+    }else{
+      message.channel.send(`<@${message.author.id}> you need to be in a voice channel to execute this command.`);
     }
+
   } else if (mess.startsWith(prefix + "leave")) {
 
     if (message.member.voiceChannel) {
@@ -164,28 +207,40 @@ client.on('message', function(message) {
     ":black_large_square::black_large_square::milky_way::black_large_square::black_large_square::milky_way::black_large_square::black_large_square:";
 
     const boogerHead = ":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️\n"+
-":black_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️\n"+
-":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️\n"+
-":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️\n"+
-":white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️\n"+
-":white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️\n"+
-":black_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️\n"+
-":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️";
+    ":black_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️\n"+
+    ":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️\n"+
+    ":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️\n"+
+    ":white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️\n"+
+    ":white_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:white_large_square:️:black_large_square:️\n"+
+    ":black_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:white_large_square:️:black_large_square:️:black_large_square:️\n"+
+    ":black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️:black_large_square:️";
 
     const heads = [vexHead, tenisHead,inlocHead,nyHead, boogerHead];
     var s = heads[getRandomInt(heads.length)]
     message.channel.send("\n" + s);
 
-  } else if (mess.startsWith("sup")) {
-    message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
-
-  } else if (mess.startsWith("im") || mess.startsWith("I'm") || mess.startsWith("Im") || mess.startsWith("i'm")) {
+  } else if (mess.toLowerCase().startsWith("sup")) {
     if(message.author.id != "529372644634787850"){
-      var tenisSay = ["im tenis from night vision","i'm autistic"];
-      message.channel.send(`Hi <@${message.author.id}> `+ tenisSay[getRandomInt(tenisSay.length)]);
+      var supSplit = message.content.split(" ");
+      if(supSplit[1] === "" || supSplit[1] === "tenis"){
+        message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
+      }
+    }
+  } else if (mess.toLowerCase().startsWith("im") || mess.toLowerCase().startsWith("i'm")) {
+    var messagesplit = message.content.split(" ");
+    if(message.author.id != "529372644634787850"){
+      if(messagesplit[1] === "autistic"){
+        message.channel.send(`no <@${message.author.id}> i'm autistic :blush:`)
+      }else if(messagesplit[1] === "tenis"){
+        message.channel.send(`no <@${message.author.id}> i'm tenis :rage:`)
+      }else{
+        const tenisSay = ["im tenis from night vision"];
+        message.channel.send(`Hi `+messagesplit[1]+`, `+ tenisSay[getRandomInt(tenisSay.length)]);
+      }
     }
   } else if (mess.startsWith("tenisxd")) {
-    const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT"];
+    message.delete();
+    const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT","https://imgur.com/RUU3Szn","https://imgur.com/RzdOIhS","https://imgur.com/kzVpmQP","https://imgur.com/AoWiwx8","https://imgur.com/s0fzNvz","https://imgur.com/EO6qcOj","https://imgur.com/iOXd2hr","https://imgur.com/BuWy2sc","https://imgur.com/ZkMPiY9","https://imgur.com/ZeSlqM3"];
     var rPic = "";
     rPic = tenisPics[getRandomInt(tenisPics.length)];
     message.channel.send(rPic);
@@ -200,7 +255,7 @@ function skipSong() {
   dispatcher.end();
 }
 
-function getQueue() {
+function getQueue(){
   var playlist = "";
   if (queueTitles.length > 0) {
     for (var i = 0; i < queueTitles.length; i++) {
