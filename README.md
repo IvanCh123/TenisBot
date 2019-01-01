@@ -24,4 +24,4 @@
 > ``sup tenis`` the bot will be thankful because you noticed him and will flirt with you a bit, don't be too excited 😳           
 > ``Im`` watch out with what you say! The bot might get angry 😈 😈          
 
-###### *Special thanks to myself cor coding the bot*
+###### *Special thanks to myself for coding the bot*
