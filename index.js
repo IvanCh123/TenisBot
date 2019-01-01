@@ -1,5 +1,8 @@
+
+
+
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const bot = new Discord.Client();
 const ytdl = require("ytdl-core");
 const request = require("request");
 const fs = require("fs");
@@ -9,11 +12,16 @@ const superagent = require("superagent");
 const colours = require("./colours.json");
 
 var config = JSON.parse(fs.readFileSync('./settings.json', 'utf-8'));
-
 const yt_api_key = config.yt_api_key;
 const bot_controller = config.bot_controller;
 const prefix = config.prefix;
 const discord_token = config.discord_token;
+
+bot.on('ready', async () =>{ //CMD green light
+  console.log(`${bot.user.username} is online`);
+  bot.user.setActivity("Hello",{type: "STREAMING"})
+
+});
 
 var queue = [];
 var isPlaying = false;
@@ -24,11 +32,11 @@ var skippers = [];
 var currentSongID = "";
 
 
-client.login(discord_token);
+bot.login(discord_token);
 
 
-client.on('message', async message => { //Allows the bot to reply when pinged
-  const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|\\${prefix})\\s*`);
+bot.on('message', async message => { //Allows the bot to reply when pinged
+  const prefixRegex = new RegExp(`^(<@!?${bot.user.id}>|\\${prefix})\\s*`);
   if (!prefixRegex.test(message.content)) return;
 
   const [, matchedPrefix] = message.content.match(prefixRegex);
@@ -38,20 +46,20 @@ client.on('message', async message => { //Allows the bot to reply when pinged
   if (command === '') { //@ing the bot
     message.delete();
     message.channel.send("**Current commands** :stuck_out_tongue: :triumph: :kissing_smiling_eyes:  \n       :one: TENISplay " +
-      "\n       :two: TENISskip \n       :three: TENISnow \n       :four: TENISqueue \n       :five: TENIStalk \n       :six: TENIShead \n       :seven: TENISleave \n       :eight: TENISdog \n       :nine: TENISmeme \n       :fire: Special Words: tenisxd, sup tenis, im");
-  }else if(command === "meme"){
-      let msg = await message.channel.send("Generating memewes...");
+      "\n       :two: TENISskip \n       :three: TENISnow \n       :four: TENISqueue \n       :five: TENIStalk \n       :six: TENIShead \n       :seven: TENISleave \n       :eight: TENISdog \n       :nine: TENIScat \n       :fire: Special Words: tenisxd, sup tenis, im");
+  }else if(command === "cat"){
+      let msg = await message.channel.send("Generating meowxd...");
 
       let {body} = await superagent
-      .get(`https://api-to.get-a.life/meme`)
+
+      .get(`http://aws.random.cat/meow`)
       if(!{body}) return message.channel.send("i dieeeed")
 
       let mEmbed = new Discord.RichEmbed()
       .setColor(colours.blue)
-      .setAuthor(`Memes xd`, message.guild.iconURL)
-      .setImage(body.url)
+      .setAuthor(`Cats meow :3`, message.guild.iconURL)
+      .setImage(body.file)
       .setTimestamp()
-      .setFooter("El tenisxd", client.user.displayAvatarURL)
 
       message.channel.send({embed: mEmbed})
 
@@ -69,7 +77,6 @@ client.on('message', async message => { //Allows the bot to reply when pinged
       .setAuthor(`Dogos owo`, message.guild.iconURL)
       .setImage(body.message)
       .setTimestamp()
-      .setFooter("El tenisxd", client.user.displayAvatarURL)
 
       message.channel.send({embed: dEmbed})
 
@@ -82,12 +89,12 @@ var skipState = false;
 var queueTitles = [];
 var leaveState = false;
 
-client.on('message', async function(message) {
+bot.on('message', async function(message) {
   const member = message.member;
   const mess = message.content;
   const args = message.content.split(' ').slice(1).join(" ");
 
-  if (mess.startsWith(prefix + "play")) { //client = bot
+  if (mess.startsWith(prefix + "play")) { //bot = bot
     if (member.voiceChannel) {
       message.member.voiceChannel.join();
       leaveState = false;
@@ -220,7 +227,7 @@ client.on('message', async function(message) {
     message.channel.send("\n" + s);
 
   } else if (mess.toLowerCase().startsWith("sup")) {
-    if(message.author.id != "529372644634787850"){
+    if(!message.author.bot){
       var supSplit = message.content.split(" ");
       if(supSplit[1] === "" || supSplit[1] === "tenis"){
         message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
@@ -245,10 +252,6 @@ client.on('message', async function(message) {
     rPic = tenisPics[getRandomInt(tenisPics.length)];
     message.channel.send(rPic);
   }
-});
-
-client.on('ready', function() { //CMD green light
-  console.log("I am ready");
 });
 
 function skipSong() {
