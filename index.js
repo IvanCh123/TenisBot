@@ -1,6 +1,3 @@
-
-
-
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const ytdl = require("ytdl-core");
@@ -19,8 +16,7 @@ const discord_token = config.discord_token;
 
 bot.on('ready', async () =>{ //CMD green light
   console.log(`${bot.user.username} is online`);
-  bot.user.setActivity("Hello",{type: "STREAMING"})
-
+  bot.user.setActivity("Hello :cowboy:",{type: "STREAMING"})
 });
 
 var queue = [];
@@ -89,9 +85,16 @@ var skipState = false;
 var queueTitles = [];
 var leaveState = false;
 
-bot.on('message', async function(message) {
-  const member = message.member;
+bot.on('message', function(message){
   const mess = message.content;
+  if((mess.startsWith(prefix + "commit") && message.author.id === "198586512210788352")){
+    message.reply(" the changes have been applied: 1");
+  }
+});
+
+bot.on('message', async function(message) {
+  const member = message.member; //Person who sent the message
+  const mess = message.content; //The content of the message sent
   const args = message.content.split(' ').slice(1).join(" ");
 
   if (mess.startsWith(prefix + "play")) { //bot = bot
@@ -247,7 +250,7 @@ bot.on('message', async function(message) {
     }
   } else if (mess.startsWith("tenisxd")) {
     message.delete();
-    const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT","https://imgur.com/RUU3Szn","https://imgur.com/RzdOIhS","https://imgur.com/kzVpmQP","https://imgur.com/AoWiwx8","https://imgur.com/s0fzNvz","https://imgur.com/EO6qcOj","https://imgur.com/iOXd2hr","https://imgur.com/BuWy2sc","https://imgur.com/ZkMPiY9","https://imgur.com/ZeSlqM3"];
+    const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT","https://imgur.com/RUU3Szn","https://imgur.com/RzdOIhS","https://imgur.com/kzVpmQP","https://imgur.com/AoWiwx8","https://imgur.com/s0fzNvz","https://imgur.com/EO6qcOj","https://imgur.com/iOXd2hr","https://imgur.com/BuWy2sc","https://imgur.com/ZkMPiY9","https://imgur.com/ZeSlqM3","https://imgur.com/CQrc6w2","https://imgur.com/wSysFRD","https://imgur.com/NftC6u3"];
     var rPic = "";
     rPic = tenisPics[getRandomInt(tenisPics.length)];
     message.channel.send(rPic);
