@@ -87,8 +87,8 @@ var leaveState = false;
 
 bot.on('message', function(message){
   const mess = message.content;
-  if((mess.startsWith(prefix + "commit") && message.author.id === "198586512210788352")){
-    message.reply(" the changes have been applied: 1");
+  if((mess === (prefix + "commit") && message.author.id === "198586512210788352")){
+    message.reply(" the changes have been applied: 3");
   }
 });
 
@@ -97,7 +97,7 @@ bot.on('message', async function(message) {
   const mess = message.content; //The content of the message sent
   const args = message.content.split(' ').slice(1).join(" ");
 
-  if (mess.startsWith(prefix + "play")) { //bot = bot
+  if (mess.startsWith(prefix + "play")) {
     if (member.voiceChannel) {
       message.member.voiceChannel.join();
       leaveState = false;
@@ -123,7 +123,7 @@ bot.on('message', async function(message) {
     } else {
       message.channel.send(`<@${message.author.id}> you need to be in a voice channel.`);
     }
-  } else if (mess.startsWith(prefix + "skip")) {
+  } else if (mess === (prefix + "skip")) {
     if(message.member.voiceChannel){
       if (queue.length > 0 || isPlaying){
         skipState = true;
@@ -146,7 +146,7 @@ bot.on('message', async function(message) {
       message.channel.send(`<@${message.author.id}> you need to be in a voice channel to execute this command.`);
     }
 
-  } else if (mess.startsWith(prefix + "leave")) {
+  } else if (mess ===(prefix + "leave")) {
 
     if (message.member.voiceChannel) {
       message.channel.send("I'm fucking leaving :triumph:");
@@ -159,20 +159,20 @@ bot.on('message', async function(message) {
       message.channel.send(`<@${message.author.id}> you need to be in a voice channel to execute this command.`);
     }
 
-  } else if (mess.startsWith(prefix + "queue")) { //broken af
+  } else if (mess === (prefix + "queue")) {
     if (queueTitles.length > 0) {
       message.channel.send("**Queue:**" + getQueue());
     } else {
       message.channel.send("The queue is empty.");
     }
-  } else if (mess.startsWith(prefix + "now")) {
+  } else if (mess === (prefix + "now")) {
     if (queue.length > 0 || isPlaying) {
       var currentSong = "https://www.youtube.com/watch?v=" + currentSongID;
       message.channel.send("Current song: " + currentSong);
     } else {
       message.channel.send("The queue is empty.");
     }
-  } else if (mess.startsWith(prefix + "talk")) {
+  } else if (mess === (prefix + "talk")) {
     var quote = "";
 
     var quotes = ["if ur vegan and drink water ur hypocrite ur destroying fish home", "every time a girl says hi to me I go into the bathroom immediately and furiously masturbate", "i would like to suck dick just once tho just to feel how they taste and at the end i would say no homo", "die urself", "i got my iphone 5 stolen by a nigger and now i hav to use android phone with 2gb :sob:", "u must be medusa bc u make me rock hard", "You like maths? Cause I want to ADD to you my life, SUBTRACT your clothes, DIVIDE your legs and MULTIPLY ourselves", "Are you a Disney princess? Cause you're cinderHella fine!", "Girls, are those space pants? Cause your butt is out of this world!", "Are you harambes enclosure? Cause i'll drop a kid inside of you!", "deltadragon i raped more women in an hour than u have fucked ur girlfriend in ur entire lifetime"];
@@ -180,7 +180,7 @@ bot.on('message', async function(message) {
     quote = quotes[getRandomInt(quotes.length)];
     message.channel.send(`<@${message.author.id}> ` + quote);
 
-  } else if (mess.startsWith(prefix + "head")) {
+  } else if (mess === (prefix + "head")) {
     const vexHead = ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
       ":black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square::black_large_square:\n" +
       ":blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book::blue_book:\n" +
@@ -236,19 +236,19 @@ bot.on('message', async function(message) {
         message.channel.send(`<@${message.author.id}> sup :stuck_out_tongue: :kissing_smiling_eyes: `);
       }
     }
-  } else if (mess.toLowerCase().startsWith("im") || mess.toLowerCase().startsWith("i'm")) {
+  } else if (mess.toLowerCase().startsWith("im ") || mess.toLowerCase().startsWith("i'm ")) {
     var messagesplit = message.content.split(" ");
     if(message.author.id != "529372644634787850"){
       if(messagesplit[1] === "autistic"){
         message.channel.send(`no <@${message.author.id}> i'm autistic :blush:`)
       }else if(messagesplit[1] === "tenis"){
         message.channel.send(`no <@${message.author.id}> i'm tenis :rage:`)
-      }else{
+      }else if(messagesplit.length > 1){
         const tenisSay = ["im tenis from night vision"];
         message.channel.send(`Hi `+messagesplit[1]+`, `+ tenisSay[getRandomInt(tenisSay.length)]);
       }
     }
-  } else if (mess.startsWith("tenisxd")) {
+  } else if (mess === "tenisxd") {
     message.delete();
     const tenisPics = ["https://imgur.com/h587aEx", "https://imgur.com/SFZ5A3Q", "https://imgur.com/4yvEggf", "https://imgur.com/gdgeJIw", "https://imgur.com/bIrHeFt", "https://imgur.com/6HTOSiB", "https://imgur.com/OtLtkXL", "https://imgur.com/T146I5Z", "https://imgur.com/mhIRKQH", "https://imgur.com/4aYnuRw", "http://prntscr.com/kia1ek", "http://prntscr.com/jqxa92", "https://i.imgur.com/Ivbczhw.png", "https://imgur.com/rc3DjHh", "http://prntscr.com/hl3vdw","https://imgur.com/VVmH9bT","https://imgur.com/RUU3Szn","https://imgur.com/RzdOIhS","https://imgur.com/kzVpmQP","https://imgur.com/AoWiwx8","https://imgur.com/s0fzNvz","https://imgur.com/EO6qcOj","https://imgur.com/iOXd2hr","https://imgur.com/BuWy2sc","https://imgur.com/ZkMPiY9","https://imgur.com/ZeSlqM3","https://imgur.com/CQrc6w2","https://imgur.com/wSysFRD","https://imgur.com/NftC6u3"];
     var rPic = "";
