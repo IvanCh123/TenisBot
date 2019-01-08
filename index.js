@@ -245,7 +245,13 @@ bot.on('message', async function(message) {
         message.channel.send(`no <@${message.author.id}> i'm tenis :rage:`)
       }else if(messagesplit.length > 1){
         const tenisSay = ["im tenis from night vision"];
-        message.channel.send(`Hi `+messagesplit[1]+`, `+ tenisSay[getRandomInt(tenisSay.length)]);
+        var mes = "";
+        for(var i =0;i<messagesplit.length;i++){
+          if(i != 0){
+              mes+=messagesplit[i]+" ";
+          }
+        }
+        message.channel.send(`Hi `+mes+`, `+ tenisSay[getRandomInt(tenisSay.length)]);
       }
     }
   } else if (mess === "tenisxd") {
